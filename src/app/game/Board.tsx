@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Tile from './Tile';
 
 type Tile = {
   value: number;
 };
 
-const getRandomValue = (board: Tile[][]) => {
+const getEmptyTiles: (board: Tile[][]) => { row: number; col: number }[] = (
+  board
+) => {
   const emptyTiles: { row: number; col: number }[] = [];
   for (let row = 0; row < 4; row++) {
     for (let col = 0; col < 4; col++) {
@@ -14,45 +16,40 @@ const getRandomValue = (board: Tile[][]) => {
       }
     }
   }
-  if (emptyTiles.length === 0) {
-    // No empty tiles left, game over
-    alert('Game Over');
-    return;
-  }
-
-  const randomIndex = Math.floor(Math.random() * emptyTiles.length);
-  const { row, col } = emptyTiles[randomIndex];
-
-  console.log(emptyTiles);
-
-  const newValue = Math.random() < 0.9 ? 2 : 4; // 90% chance of 2, 10% chance of 4
-
-  return { row, col, newValue };
+  return emptyTiles;
 };
 
-const initBoard: () => () => Tile[][] = () => () => {
-  const board = Array.from<Tile>({ length: 4 })
-    .fill({ value: 0 })
-    .reduce<Tile[][]>(
-      (prev) => [...prev, Array.from<Tile>({ length: 4 }).fill({ value: 0 })],
-      []
-    );
-
-  const rnd1 = getRandomValue(board);
-  const rnd2 = getRandomValue(board);
-
-  if (rnd1 && rnd2) {
-    board[rnd1.row][rnd1.col] = { value: rnd1.newValue };
-    board[rnd2.row][rnd2.col] = { value: rnd2.newValue };
-  }
-  return board;
+const getRandomValue: (board: Tile[][]) => {
+  row: number;
+  col: number;
+  newValue: number;
+} = (board: Tile[][]) => {
+  const emptyTiles = getEmptyTiles(board);
+  const tile = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
+  return { ...tile, newValue: Math.random() < 0.9 ? 2 : 4 };
 };
+
+const initBoard: () => Tile[][] = () =>
+  [getRandomValue, getRandomValue].reduce(
+    (prev, curr) => {
+      const rnd = curr(prev);
+      if (!rnd) {
+        return prev;
+      }
+      prev[rnd.row][rnd.col] = { value: rnd.newValue };
+      return prev;
+    },
+    Array.from<Tile>({ length: 4 })
+      .fill({ value: 0 })
+      .reduce<Tile[][]>(
+        (prev) => [...prev, Array.from<Tile>({ length: 4 }).fill({ value: 0 })],
+        []
+      )
+  );
 
 const Board = () => {
-  const [board, setBoard] = useState<Tile[][]>(initBoard());
-  const [score, setScore] = useState(0);
+  const [board, setBoard] = useState<Tile[][]>(initBoard);
 
-  // Handle user input (e.g., arrow key presses) using event listeners
   useEffect(() => {
     const mapKey = (event: KeyboardEvent) =>
       new Map([
@@ -63,8 +60,6 @@ const Board = () => {
       ]).get(event.key);
 
     const handleKeyPress = (event: KeyboardEvent) => {
-      // Update the game state based on the key pressed
-      // (You can add your key handling logic here)
       const direction = mapKey(event);
       if (!direction) {
         return;
@@ -117,7 +112,6 @@ const Board = () => {
               // Merge the current tile with the next tile
               newBoard[nextRow][nextCol] = { value: tile.value * 2 };
               newBoard[newRow][newCol] = { value: 0 };
-              setScore((s) => s + +tile.value * 2);
               moved = true;
               break;
             } else {
@@ -134,6 +128,11 @@ const Board = () => {
           newBoard[rndVal.row][rndVal.col] = { value: rndVal.newValue };
         }
         setBoard(newBoard);
+      } else {
+        // const emptyTiles = getEmptyTiles(newBoard);
+        // if (emptyTiles.length === 0) {
+        //   alert('Game Over');
+        // }
       }
     };
 
@@ -143,20 +142,23 @@ const Board = () => {
     };
   }, [board]);
 
+  const score = useMemo(
+    () => board.flat().reduce((p, c) => p + c.value, 0),
+    [board]
+  );
+
   return (
-    <>
+    <div className="container">
+      <div className="score">Score: {score}</div>
+
       <div className="board">
-        {/* Render the game board */}
         {board.map((row, rowIndex) =>
           row.map((tile, colIndex) => (
             <Tile key={`${rowIndex}-${colIndex}`} value={tile.value} />
           ))
         )}
-        {/* Display the score */}
-        <div className="score">Score: {score}</div>
       </div>
-      <pre>{JSON.stringify(board, undefined, 2)}</pre>
-    </>
+    </div>
   );
 };
 
