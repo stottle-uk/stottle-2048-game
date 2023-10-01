@@ -1,0 +1,12 @@
+{
+  "hosting": {
+    "public": "dist/stottle-2048-game",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

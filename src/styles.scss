@@ -20,12 +20,20 @@ html {
 .board {
   display: grid;
   grid-template-columns: repeat(4, 100px);
-  grid-template-rows: masonry;
   gap: 10px;
 }
 
+/* Mobile-responsive styles */
+@media (max-width: 768px) {
+  .board {
+    width: 100%;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 .tile {
-  width: 100px;
+  width: 100%;
+  max-width: 100px;
   height: 100px;
   background-color: #eee;
   font-size: 24px;
@@ -100,6 +108,7 @@ html {
 }
 
 .score {
+  width: 140px;
   display: flex;
   justify-content: center;
   align-items: center;
