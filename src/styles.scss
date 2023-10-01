@@ -13,7 +13,8 @@ html {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
+  margin-top: -56px;
 }
 
 .board {
@@ -21,7 +22,6 @@ html {
   grid-template-columns: repeat(4, 100px);
   grid-template-rows: masonry;
   gap: 10px;
-  margin-top: 20px;
 }
 
 .tile {
@@ -32,9 +32,105 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+
+  transition: transform 0.2s ease-in-out;
+  border-radius: 8px;
+  border-width: 4px;
+  border-style: solid;
+
+  &.tile-0 {
+    border-style: none;
+  }
+
+  &.tile-2 {
+    background-color: #eee4da;
+    border-color: #d0c9bf;
+  }
+
+  &.tile-4 {
+    background-color: #ede0c8;
+    border-color: #ccc1b5;
+  }
+
+  &.tile-8 {
+    background-color: #f2b179;
+    border-color: #d5a06d;
+  }
+
+  &.tile-16 {
+    background-color: #f59563;
+    border-color: #d38854;
+  }
+
+  &.tile-32 {
+    background-color: #f67c5f;
+    border-color: #d4714f;
+  }
+
+  &.tile-64 {
+    background-color: #f65e3b;
+    border-color: #d65b37;
+  }
+
+  &.tile-128 {
+    background-color: #edcf72;
+    border-color: #d0c961;
+  }
+
+  &.tile-256 {
+    background-color: #edcc61;
+    border-color: #d1c55a;
+  }
+
+  &.tile-512 {
+    background-color: #edc850;
+    border-color: #d1c641;
+  }
+
+  &.tile-1024 {
+    background-color: #edc53f;
+    border-color: #d1c33b;
+  }
+
+  &.tile-2048 {
+    background-color: #edc22e;
+    border-color: #d1c12b;
+  }
 }
 
 .score {
-  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 24px;
+  font-weight: bold;
+  color: #fff; /* Text color */
+  background-color: #333; /* Background color for the box */
+  padding: 10px 20px; /* Add padding to the box */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+
+  .score-label {
+    margin-right: 8px; /* Add spacing between the "Score:" label and the score value */
+  }
+
+  .score-value {
+    color: #f2b179; /* Adjust the color to your preference */
+  }
+}
+
+.game-over {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #e74c3c; /* Text color */
+  transition: opacity 0.3s; /* Add a smooth fade-in/fade-out transition */
+  opacity: 0; /* Initially hidden */
+
+  &.show {
+    opacity: 1; /* Show the game over message when the game is over */
+  }
 }

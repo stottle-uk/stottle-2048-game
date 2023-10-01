@@ -1,11 +1,13 @@
 import React from 'react';
 
-const Tile: React.FC<{ value: number }> = ({ value }) => {
-  return (
-    <div key={value} className={`tile tile-${value}`}>
-      {value > 0 && value}
-    </div>
-  );
-};
+interface OwnProps extends Omit<React.HTMLProps<HTMLDivElement>, 'className'> {
+  value: number;
+}
+
+const Tile: React.FC<OwnProps> = ({ value, ...props }) => (
+  <div data-testid="tile" className={`tile tile-${value}`} {...props}>
+    {value > 0 && value}
+  </div>
+);
 
 export default Tile;
