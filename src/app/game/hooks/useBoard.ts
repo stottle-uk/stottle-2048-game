@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 export type BoardTile = {
   value: number;
 };
+
+type Direction = 'right' | 'left' | 'up' | 'down';
 
 const getEmptyTiles: (
   board: BoardTile[][]
@@ -93,10 +95,11 @@ export const useBoard = (init: BoardTile[][] = []) => {
   const [board, setBoard] = useState<BoardTile[][]>(initBoard(init));
   const [isGameOver, setGameOver] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const boardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mapKey = (event: KeyboardEvent) =>
-      new Map([
+      new Map<KeyboardEvent['key'], Direction>([
         ['ArrowUp', 'up'],
         ['ArrowDown', 'down'],
         ['ArrowLeft', 'left'],
@@ -113,6 +116,7 @@ export const useBoard = (init: BoardTile[][] = []) => {
     };
 
     const handleTouchStart = (event: TouchEvent) => {
+      event.preventDefault();
       setStartPos({ x: event.touches[0].clientX, y: event.touches[0].clientY });
     };
 
@@ -135,7 +139,7 @@ export const useBoard = (init: BoardTile[][] = []) => {
       }
     };
 
-    const handleMove = (direction: string) => {
+    const handleMove = (direction: Direction) => {
       const newBoard: BoardTile[][] = JSON.parse(JSON.stringify(board));
 
       // Determine the order of traversal based on the direction
@@ -203,15 +207,17 @@ export const useBoard = (init: BoardTile[][] = []) => {
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchend', handleTouchEnd);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
-    };
+    const ref = boardRef.current;
+    if (ref) {
+      ref.addEventListener('keydown', handleKeyPress);
+      ref.addEventListener('touchstart', handleTouchStart);
+      ref.addEventListener('touchend', handleTouchEnd);
+      return () => {
+        ref.removeEventListener('keydown', handleKeyPress);
+        ref.removeEventListener('touchstart', handleTouchStart);
+        ref.removeEventListener('touchend', handleTouchEnd);
+      };
+    }
   }, [board, startPos]);
 
   const score = useMemo(
@@ -219,5 +225,5 @@ export const useBoard = (init: BoardTile[][] = []) => {
     [board]
   );
 
-  return { board, score, isGameOver };
+  return { board, score, isGameOver, boardRef };
 };

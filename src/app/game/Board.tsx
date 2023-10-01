@@ -3,7 +3,7 @@ import Tile from './Tile';
 import { BoardTile, useBoard } from './hooks/useBoard';
 
 const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
-  const { board, score, isGameOver } = useBoard(init);
+  const { board, score, isGameOver, boardRef } = useBoard(init);
 
   return (
     <div className="container">
@@ -16,7 +16,7 @@ const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
         {isGameOver ? <span>Game Over</span> : <span>&nbsp;</span>}
       </div>
 
-      <div className="board">
+      <div className="board" ref={boardRef}>
         {board.map((row, rowIndex) =>
           row.map((tile, colIndex) => (
             <Tile key={`${rowIndex}-${colIndex}`} value={tile.value} />
