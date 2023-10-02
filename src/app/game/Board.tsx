@@ -11,7 +11,7 @@ const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
       const ro = new ResizeObserver((entries) => {
         for (const entry of entries) {
           const { height, width } = entry.contentRect;
-          const dimension = Math.min(height - 100, width) * 0.9 + 'px';
+          const dimension = Math.min(height, width) * 0.9 + 'px';
           ref.style.height = dimension;
           ref.style.width = dimension;
         }

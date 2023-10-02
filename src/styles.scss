@@ -7,13 +7,13 @@ html {
 }
 
 .container {
-  height: 100vh;
+  height: calc(100vh - 78px);
   width: 100vw;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   box-sizing: border-box;
 }
 
@@ -113,23 +113,16 @@ html {
 
 .score {
   width: 140px;
+  margin-top: 36px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 24px;
   font-weight: bold;
-  color: #fff; /* Text color */
-  background-color: #333; /* Background color for the box */
-  padding: 10px 20px; /* Add padding to the box */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-
-  .score-label {
-    margin-right: 8px; /* Add spacing between the "Score:" label and the score value */
-  }
+  color: #333; /* Text color */
 
   .score-value {
-    color: #f2b179; /* Adjust the color to your preference */
+    color: #d4714f;
   }
 }
 
