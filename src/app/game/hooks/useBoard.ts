@@ -92,10 +92,10 @@ const hasPossibleMoves = (board: BoardTile[][]) => {
 };
 
 export const useBoard = (init: BoardTile[][] = []) => {
+  const boardRef = useRef<HTMLDivElement>(null);
   const [board, setBoard] = useState<BoardTile[][]>(initBoard(init));
   const [isGameOver, setGameOver] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-  const boardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mapKey = (event: KeyboardEvent) =>
@@ -209,11 +209,21 @@ export const useBoard = (init: BoardTile[][] = []) => {
 
     const ref = boardRef.current;
     if (ref) {
-      ref.addEventListener('keydown', handleKeyPress);
+      const ro = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const cr = entry.contentRect;
+          const sdsd = Math.min(cr.height, cr.width) + 'px';
+          ref.style.height = sdsd;
+          ref.style.width = sdsd;
+        }
+      });
+      ro.observe(window.document.documentElement);
+
+      window.addEventListener('keydown', handleKeyPress);
       ref.addEventListener('touchstart', handleTouchStart);
       ref.addEventListener('touchend', handleTouchEnd);
       return () => {
-        ref.removeEventListener('keydown', handleKeyPress);
+        window.removeEventListener('keydown', handleKeyPress);
         ref.removeEventListener('touchstart', handleTouchStart);
         ref.removeEventListener('touchend', handleTouchEnd);
       };
