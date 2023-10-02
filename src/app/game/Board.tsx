@@ -1,9 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Tile from './Tile';
 import { BoardTile, useBoard } from './hooks/useBoard';
 
 const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
   const { board, score, isGameOver, boardRef } = useBoard(init);
+
+  useEffect(() => {
+    const ref = boardRef.current;
+    if (ref) {
+      const ro = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const { height, width } = entry.contentRect;
+          const dimension = Math.min(height - 100, width) * 0.9 + 'px';
+          ref.style.height = dimension;
+          ref.style.width = dimension;
+        }
+      });
+      ro.observe(document.documentElement);
+
+      return () => {
+        ro.unobserve(document.documentElement);
+      };
+    }
+  }, [boardRef]);
 
   return (
     <div className="container">

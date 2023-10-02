@@ -209,16 +209,6 @@ export const useBoard = (init: BoardTile[][] = []) => {
 
     const ref = boardRef.current;
     if (ref) {
-      const ro = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          const cr = entry.contentRect;
-          const sdsd = Math.min(cr.height, cr.width) + 'px';
-          ref.style.height = sdsd;
-          ref.style.width = sdsd;
-        }
-      });
-      ro.observe(window.document.documentElement);
-
       window.addEventListener('keydown', handleKeyPress);
       ref.addEventListener('touchstart', handleTouchStart);
       ref.addEventListener('touchend', handleTouchEnd);

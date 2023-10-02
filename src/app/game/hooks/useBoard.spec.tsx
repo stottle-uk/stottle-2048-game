@@ -8,13 +8,15 @@ describe('useBoard Hook', () => {
 
   beforeEach(() => {
     TestComponent = ({ init }) => {
-      const hookValues = useBoard(init);
+      const { boardRef, ...hookValues } = useBoard(init);
       return (
-        <>
+        <div ref={boardRef}>
           {Object.entries(hookValues).map(([key, value]) => (
-            <div data-testid={key}>{JSON.stringify(value)}</div>
+            <div key={key} data-testid={key}>
+              {JSON.stringify(value)}
+            </div>
           ))}
-        </>
+        </div>
       );
     };
   });
@@ -99,8 +101,10 @@ describe('useBoard Hook', () => {
 
     // Simulate a swipe gesture (e.g., right)
     act(() => {
-      fireEvent.touchStart(window, { touches: [{ clientX: 0, clientY: 0 }] });
-      fireEvent.touchEnd(window, {
+      fireEvent.touchStart(boardData, {
+        touches: [{ clientX: 0, clientY: 0 }],
+      });
+      fireEvent.touchEnd(boardData, {
         changedTouches: [{ clientX: 100, clientY: 0 }],
       });
     });
