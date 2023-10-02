@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export type BoardTile = {
   value: number;
@@ -95,6 +95,9 @@ export const useBoard = (init: BoardTile[][] = []) => {
   const boardRef = useRef<HTMLDivElement>(null);
   const [board, setBoard] = useState<BoardTile[][]>(initBoard(init));
   const [isGameOver, setGameOver] = useState(false);
+  const [score, setScore] = useState(
+    board.flat().reduce((p, c) => p + c.value, 0)
+  );
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -188,6 +191,8 @@ export const useBoard = (init: BoardTile[][] = []) => {
               newBoard[nextRow][nextCol] = { value: tile.value * 2 };
               newBoard[newRow][newCol] = { value: 0 };
               moved = true;
+              setScore((prev) => prev + tile.value + nextTile.value);
+
               break;
             } else {
               break; // Tile cannot move further
@@ -203,6 +208,7 @@ export const useBoard = (init: BoardTile[][] = []) => {
           newBoard[rndVal.row][rndVal.col] = { value: rndVal.newValue };
         }
         setBoard(newBoard);
+        setScore((prev) => prev + rndVal.newValue);
       } else if (!hasPossibleMoves(board)) {
         setGameOver(true);
       }
@@ -220,11 +226,6 @@ export const useBoard = (init: BoardTile[][] = []) => {
       };
     }
   }, [board, startPos]);
-
-  const score = useMemo(
-    () => board.flat().reduce((p, c) => p + c.value, 0),
-    [board]
-  );
 
   return { board, score, isGameOver, boardRef };
 };
