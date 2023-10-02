@@ -123,18 +123,19 @@ export const useBoard = (init: BoardTile[][] = []) => {
     const handleTouchEnd = (event: TouchEvent) => {
       const deltaX = event.changedTouches[0].clientX - startPos.x;
       const deltaY = event.changedTouches[0].clientY - startPos.y;
-
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        if (deltaX > 0) {
-          handleMove('right');
+      if (Math.abs(deltaX) > 30 || Math.abs(deltaY) > 30) {
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (deltaX > 0) {
+            handleMove('right');
+          } else {
+            handleMove('left');
+          }
         } else {
-          handleMove('left');
-        }
-      } else {
-        if (deltaY > 0) {
-          handleMove('down');
-        } else {
-          handleMove('up');
+          if (deltaY > 0) {
+            handleMove('down');
+          } else {
+            handleMove('up');
+          }
         }
       }
     };
