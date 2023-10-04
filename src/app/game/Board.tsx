@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import Tile from './Tile';
+import Score from './components/Score';
+import Tile from './components/Tile';
 import { BoardTile, useBoard } from './hooks/useBoard';
+import { useStorage } from './hooks/useStorage';
 
 const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
   const { board, score, isGameOver, boardRef } = useBoard(init);
+  const [highScore, setHighScore] = useStorage('highScore', score);
 
   useEffect(() => {
     const ref = boardRef.current;
@@ -24,11 +27,17 @@ const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
     }
   }, [boardRef]);
 
+  useEffect(() => {
+    if (score > highScore) {
+      setHighScore(score);
+    }
+  }, [score, highScore, setHighScore]);
+
   return (
     <div className="container">
       <div className="score">
-        <span className="score-label">Score:</span>
-        <span className="score-value">{score}</span>
+        <Score label="Current Score" score={score} />
+        <Score label="High Score" score={highScore} />
       </div>
 
       <div className={`game-over ${isGameOver ? 'show' : 'hide'}`}>
