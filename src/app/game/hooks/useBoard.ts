@@ -207,6 +207,7 @@ export const useBoard = () => {
         }
         setBoard(newBoard);
         setScore((prev) => prev + rndVal.newValue);
+        setGameOver(false);
       } else if (!hasPossibleMoves(board)) {
         setGameOver(true);
       }
@@ -225,10 +226,11 @@ export const useBoard = () => {
     }
   }, [board, startPos]);
 
-  const setupBoard = (init: BoardTile[][], score: number) => {
+  const setupBoard = (init: BoardTile[][] = [], score = 0) => {
     const board = initBoard(init);
     setBoard(board);
     setScore(score || board.flat().reduce((p, c) => p + c.value, 0));
+    setGameOver(false);
   };
 
   return { board, score, isGameOver, boardRef, setupBoard };

@@ -62,9 +62,17 @@ const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
         setupBoard(data.board, data.score);
         setIsHost(data.hostGuid === hostGuid || !data.hostGuid);
         firstRun.current = false;
-      } else {
-        if (JSON.stringify(data.board) !== JSON.stringify(board) && isHost) {
-          writeData({ board, score, isGameOver, ...(isHost && { hostGuid }) });
+      } else if (isHost) {
+        if (
+          JSON.stringify(data.board) !== JSON.stringify(board) ||
+          data.isGameOver !== isGameOver
+        ) {
+          writeData({
+            board,
+            score,
+            isGameOver,
+            ...(isHost && { hostGuid }),
+          });
         }
       }
     }
@@ -72,6 +80,7 @@ const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
     board,
     data.board,
     data.hostGuid,
+    data.isGameOver,
     data.isLoaded,
     data.score,
     hostGuid,
@@ -86,6 +95,8 @@ const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
     <div className="container">
       <div className="score">
         <Score label="Current Score" score={data.score} />
+        {isHost && <button className="reset" onClick={() => setupBoard()} />}
+
         <Score label="High Score" score={highScore} />
       </div>
 
