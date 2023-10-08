@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import { useFirebaseItem } from '../firebase';
 import Score from './components/Score';
 import Tile from './components/Tile';
 import { BoardTile, useBoard } from './hooks/useBoard';
-import { useFirebaseItem } from './hooks/useFirebaseItem';
 import { useStorage } from './hooks/useStorage';
 
 interface GameStata {
@@ -13,12 +15,16 @@ interface GameStata {
 }
 
 const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
-  const { data, writeData } = useFirebaseItem<GameStata>('/2048-game', {
-    board: init || [],
-    score: 0,
-    isGameOver: false,
-    hostGuid: '',
-  });
+  const { gameId } = useParams();
+  const { data, writeData } = useFirebaseItem<GameStata>(
+    `/2048-game/${gameId}`,
+    {
+      board: init || [],
+      score: 0,
+      isGameOver: false,
+      hostGuid: '',
+    }
+  );
   const { board, score, isGameOver, boardRef, setupBoard } = useBoard();
   const [highScore, setHighScore] = useStorage('highScore', score);
   const [hostGuid, setHostGuid] = useStorage('hostGuid', '');
@@ -52,7 +58,7 @@ const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
 
   useEffect(() => {
     if (!hostGuid) {
-      setHostGuid(Date.now().toString());
+      setHostGuid(uuidv4());
     }
   }, [hostGuid, setHostGuid]);
 

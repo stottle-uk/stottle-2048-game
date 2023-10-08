@@ -178,3 +178,55 @@ html {
     position: absolute;
   }
 }
+
+.landing-page {
+  height: calc(100vh - 78px);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  margin: 64px;
+
+  .new-game-button {
+    display: inline-block;
+    width: 96px;
+    height: 48px;
+    background-color: #eee4da;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+    line-height: 48px;
+    transition: background-color 0.3s;
+    border: 0;
+    color: #333;
+  }
+
+  .new-game-button:hover {
+    background-color: #f2b179;
+  }
+
+  .jumbotron {
+    background-color: #333;
+    color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .jumbotron h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .jumbotron p {
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+}

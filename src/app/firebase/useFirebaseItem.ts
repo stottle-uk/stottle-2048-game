@@ -1,8 +1,6 @@
-import { getDatabase, onValue, ref, set } from 'firebase/database';
-import { useCallback, useEffect, useRef, useState } from 'react';
-
-const useFirebaseDbRef = (firebasePath: string) =>
-  useRef(ref(getDatabase(), firebasePath));
+import { onValue, set } from 'firebase/database';
+import { useCallback, useEffect, useState } from 'react';
+import { useFirebaseDbRef } from './useFirebaseDb';
 
 export const useFirebaseItem = <T>(firebasePath: string, init: T) => {
   const [data, setData] = useState<T & { isLoaded: boolean }>({
