@@ -15,7 +15,7 @@ export const useFirebaseList = (firebasePath: string) => {
       onValue(query(firebaseRef.current), (snapshot) => {
         setData({
           isLoaded: true,
-          gameIds: Object.keys(snapshot.val()),
+          gameIds: Object.keys(snapshot.val() || []),
         });
       });
     } catch (err) {
