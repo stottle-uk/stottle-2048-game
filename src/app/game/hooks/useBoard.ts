@@ -91,13 +91,11 @@ const hasPossibleMoves = (board: BoardTile[][]) => {
   return false; // No empty tiles and no possible moves
 };
 
-export const useBoard = (init: BoardTile[][] = []) => {
+export const useBoard = () => {
   const boardRef = useRef<HTMLDivElement>(null);
-  const [board, setBoard] = useState<BoardTile[][]>(initBoard(init));
+  const [board, setBoard] = useState<BoardTile[][]>([]);
   const [isGameOver, setGameOver] = useState(false);
-  const [score, setScore] = useState(
-    board.flat().reduce((p, c) => p + c.value, 0)
-  );
+  const [score, setScore] = useState(0);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -227,5 +225,11 @@ export const useBoard = (init: BoardTile[][] = []) => {
     }
   }, [board, startPos]);
 
-  return { board, score, isGameOver, boardRef };
+  const setupBoard = (init: BoardTile[][], score: number) => {
+    const board = initBoard(init);
+    setBoard(board);
+    setScore(score || board.flat().reduce((p, c) => p + c.value, 0));
+  };
+
+  return { board, score, isGameOver, boardRef, setupBoard };
 };

@@ -151,10 +151,4 @@ html {
   font-size: 24px;
   font-weight: bold;
   color: #e74c3c; /* Text color */
-  transition: opacity 0.3s; /* Add a smooth fade-in/fade-out transition */
-  opacity: 0; /* Initially hidden */
-
-  &.show {
-    opacity: 1; /* Show the game over message when the game is over */
-  }
 }
