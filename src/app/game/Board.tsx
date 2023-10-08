@@ -45,10 +45,10 @@ const Board: React.FC<{ init?: BoardTile[][] }> = ({ init }) => {
   }, [boardRef]);
 
   useEffect(() => {
-    if (data.score > highScore) {
+    if (data.score > highScore && isHost) {
       setHighScore(data.score);
     }
-  }, [data.score, highScore, setHighScore]);
+  }, [data.score, highScore, isHost, setHighScore]);
 
   useEffect(() => {
     if (!hostGuid) {
