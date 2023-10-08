@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React from 'react';
+import { useStyleTimeout } from '../hooks/useStyleTimeout';
 
 interface OwnProps
   extends Omit<React.HTMLProps<HTMLDivElement>, 'className' | 'ref'> {
@@ -6,23 +7,13 @@ interface OwnProps
 }
 
 const Tile: React.FC<OwnProps> = ({ value, ...props }) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    if (ref.current && value > 0) {
-      const tile = ref.current;
-      tile.classList.add('tile-change');
-      setTimeout(() => {
-        tile.classList.remove('tile-change');
-      }, 100);
-    }
-  }, [value]);
+  const { elRef } = useStyleTimeout<HTMLDivElement>('tile-change', value);
 
   return (
     <div
       data-testid="tile"
       className={`tile tile-${value}`}
-      ref={ref}
+      ref={elRef}
       {...props}
     >
       {value > 0 ? <span>{value}</span> : <span>&nbsp;</span>}
