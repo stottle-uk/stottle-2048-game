@@ -19,7 +19,7 @@ const LandingPage: React.FC = () => {
           onClick={() => navigate(`/${uuidv4()}`)}
           className="new-game-button"
         >
-          Start New Game
+          Start new game
         </button>
       </div>
 

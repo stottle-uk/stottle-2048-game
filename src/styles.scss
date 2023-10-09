@@ -192,7 +192,6 @@ html {
 
   .new-game-button {
     display: inline-block;
-    width: 96px;
     height: 48px;
     background-color: #eee4da;
     border-radius: 5px;
@@ -204,6 +203,8 @@ html {
     transition: background-color 0.3s;
     border: 0;
     color: #333;
+    padding: 0 16px;
+    cursor: pointer;
   }
 
   .new-game-button:hover {
